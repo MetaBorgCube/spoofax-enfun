@@ -18,7 +18,7 @@ imports
   include/Enfun-parenthesize
   syntax/Enfun.generated
   syntax/pp-runtime
-  names
+  new-names
   check
   generate
   refactor

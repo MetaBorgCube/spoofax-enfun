@@ -314,6 +314,17 @@ strategies
        , <pp-indent(|"2")> [S("}")]
        ]
 
+  prettyprint-Stat =
+    ?Seq(a)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ S("(")
+           , <pp-H-list(prettyprint-Stat)> a
+           , S(")")
+           ]
+         )
+       ]
+
   prettyprint-example =
     prettyprint-Stat
 

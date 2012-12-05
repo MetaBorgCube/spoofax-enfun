@@ -82,11 +82,11 @@ exports
 
   context-free syntax
     "(" Exp ")"  -> Exp {bracket}
-    "true"       -> Exp {"True"}
-    "false"      -> Exp {"False"}
-    "!" Exp      -> Exp {"Not"}
-    Exp "&&" Exp -> Exp {"And", left}
-    Exp "||" Exp -> Exp {"Or", left}
+    "true"       -> Exp {cons("True")}
+    "false"      -> Exp {cons("False")}
+    "!" Exp      -> Exp {cons("Not")}
+    Exp "&&" Exp -> Exp {cons("And"), left}
+    Exp "||" Exp -> Exp {cons("Or"), left}
 
   context-free syntax
     CONTENTCOMPLETE -> Exp {cons("COMPLETION-Exp")}

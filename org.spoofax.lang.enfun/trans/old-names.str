@@ -1,4 +1,4 @@
-module names
+module old-names
 
 imports
   lib/analysis-library.generated

@@ -49,6 +49,8 @@ completions
     <ID:Exp> ";"  
   completion template Stat : "{ }" =
     "{\n\t\t" (cursor) "\n\t}" (blank)  
+  completion template Stat : "()" =
+    "(" <:Stat> ")"  
 
 completions
   completion template Stat : "if(ID) { }" =

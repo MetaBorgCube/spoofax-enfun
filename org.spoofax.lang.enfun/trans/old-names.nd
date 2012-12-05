@@ -1,4 +1,4 @@
-module names
+module old-names
 
 imports include/Enfun 
 	
@@ -28,7 +28,7 @@ rules // entities
     imports Function from Type c' {transitive}
     scopes Property, Function, Type, Variable
     where params has type t*
-    			
+    
 	Type(x, _) :
 		refers to Type x
 		
