@@ -40,5 +40,25 @@
         <import file="build.generated.xml"/>
     
         <!-- Main target -->
-        <target name="all" depends="spoofaximp.default.ctree"/>
-    </project>
+        <target name="all" depends="link-lib-files, copy-lib-files, spoofaximp.default.ctree"/>
+	
+			  <target name="os-detection">
+			    <condition property="isWin">
+			      <os family="windows"/>
+			    </condition>  
+			  </target>
+			  
+			  <target name="copy-lib-files" if="isWin" depends="os-detection">
+			    <!-- Copy NBL libraries, Ant is stupid and cannot link on Windows :( -->
+					<!-- TODO -->
+			  </target>
+			  
+			  <target name="link-lib-files" unless="isWin" depends="os-detection">
+			    <!-- Link to NBL libraries. -->
+			    <symlink 
+			    	resource="${basedir}/../../nbl-library/org.strategoxt.imp.names.library/nbl/" 
+			    	link="${basedir}/lib/nbl" 
+			    	overwrite="true" 
+			    />
+			  </target>
+</project>
