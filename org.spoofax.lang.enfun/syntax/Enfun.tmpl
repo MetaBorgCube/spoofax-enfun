@@ -48,7 +48,7 @@ templates // functions
   Exp.ThisCall = <<ID>(<Exp*; separator=",">)>  
   Exp.MethCall = <<Exp>.<ID>(<Exp*; separator=",">)>
   Arg.Arg      = <<ID> : <Type>>
-  ReturnType   = <: <Type>>
+  ReturnType   = <: <Type>> {bracket}
   Stat.Return  = <return <Exp>;> 
   
 templates // statements

@@ -257,7 +257,7 @@ strategies
        ]
 
   prettyprint-ReturnType =
-    ?a
+    ?Parenthetical(a)
     ; ![ H(
            [SOpt(HS(), "0")]
          , [ S(": ")

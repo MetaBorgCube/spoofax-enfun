@@ -41,7 +41,7 @@ exports
     ID "(" {Exp ","}* ")"                                      -> Exp        {cons("ThisCall")}
     Exp "." ID "(" {Exp ","}* ")"                              -> Exp        {cons("MethCall")}
     ID ":" Type                                                -> Arg        {cons("Arg")}
-    ":" Type                                                   -> ReturnType 
+    ":" Type                                                   -> ReturnType {bracket}
     "return" Exp ";"                                           -> Stat       {cons("Return")}
 
   context-free syntax
