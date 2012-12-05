@@ -50,7 +50,9 @@
 			  
 			  <target name="copy-lib-files" if="isWin" depends="os-detection">
 			    <!-- Copy NBL libraries, Ant is stupid and cannot link on Windows :( -->
-					<!-- TODO -->
+			  	<copy todir="${basedir}/lib/nbl" >  
+			  	  <fileset dir="${basedir}/../../nbl-library/org.strategoxt.imp.names.library/nbl/" includes="**"/>  
+			  	</copy>
 			  </target>
 			  
 			  <target name="link-lib-files" unless="isWin" depends="os-detection">

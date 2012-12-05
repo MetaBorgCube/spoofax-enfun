@@ -1,4 +1,6 @@
 /.cache
-/include
+/include/*
+!/include/Enfun-parenthesize.str
 /bin
 /lib/nbl
+/lib-refactoring
