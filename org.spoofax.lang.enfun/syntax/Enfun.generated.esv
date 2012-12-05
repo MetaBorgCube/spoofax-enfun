@@ -1,0 +1,107 @@
+module example
+
+completions
+  completion template Module : "module ID " =
+    "module " <ID:ID> "\n\n" (cursor) (blank)  
+  completion template Definition : "imports ID" =
+    "imports " <ID:ID>  
+
+completions
+  completion template Definition : "entity ID { }" =
+    "entity " <ID:ID> <:TypeParams> " " <:Extension> " {\n\t" (cursor) "\n}" (blank)  
+  completion template Extension : ": ID" =
+    ": " <ID:ID>                           
+  completion template Type : "ID<>" =
+    <ID:ID> "<" <:Type> ">"                     
+  completion template TypeParams : "<>" =
+    "<" <:TypeParam> ">" (blank)            
+
+completions
+  completion template Property : "ID : ID " =
+    <ID:ID> " : " <ID:Type> " " <:PropInit> (blank)  
+  completion template PropInit : ":= ID" =
+    ":= " <ID:Exp>  
+  completion template Exp : "ID.ID" =
+    <ID:Exp> "." <ID:ID>  
+  completion template Exp : "this" =
+    "this"      
+  completion template Exp : "ID.new()" =
+    <ID:Type> ".new()"  
+
+completions
+  completion template Property : "function ID () " =
+    "function " <ID:ID> " (" <:Arg> ") " <:ReturnType> (blank)  
+  completion template Property : "function ID () { }" =
+    "function " <ID:ID> " (" <:Arg> ") " <:ReturnType> " {\n\t" (cursor) "\n}" (blank)  
+  completion template Exp : "ID()" =
+    <ID:ID> "(" <:Exp> ")"                         
+  completion template Exp : "ID.ID()" =
+    <ID:Exp> "." <ID:ID> "(" <:Exp> ")"         
+  completion template Arg : "ID : ID" =
+    <ID:ID> " : " <ID:Type>                     
+  completion template ReturnType : ": ID" =
+    ": " <ID:Type>                          
+  completion template Stat : "return ID;" =
+    "return " <ID:Exp> ";"                  
+
+completions
+  completion template Stat : "ID;" =
+    <ID:Exp> ";"  
+  completion template Stat : "{ }" =
+    "{\n\t\t" (cursor) "\n\t}" (blank)  
+
+completions
+  completion template Stat : "if(ID) { }" =
+    "if(" <ID:Exp> ") {\n\t" (cursor) "\n}" (blank)  
+  completion template ElseIf : "} else if (ID) { " =
+    "} else if (" <ID:Exp> ") {\n\t" (cursor) (blank)  
+  completion template Else : "} else { " =
+    "} else {\n\t" (cursor) (blank)  
+  completion template Stat : "while(ID) { }" =
+    "while(" <ID:Exp> ") {\n\t" (cursor) "\n}" (blank)  
+
+completions
+  completion template Stat : "var ID : ID;" =
+    "var " <ID:ID> " : " <ID:Type> ";" (blank)  
+  completion template Stat : "var ID : ID := ID;" =
+    "var " <ID:ID> " : " <ID:Type> " := " <ID:Exp> ";" (blank)  
+  completion template Stat : "ID := ID;" =
+    <ID:Exp> " := " <ID:Exp> ";" (blank)  
+
+completions
+  completion template Exp : "(ID)" =
+    "(" <ID:Exp> ")"  
+  completion template Exp : "true" =
+    "true"  
+  completion template Exp : "false" =
+    "false"  
+  completion template Exp : "!ID" =
+    "!" <ID:Exp>  
+  completion template Exp : "ID && ID" =
+    <ID:Exp> " && " <ID:Exp>  
+  completion template Exp : "ID || ID" =
+    <ID:Exp> " || " <ID:Exp>  
+
+completions
+  completion template Exp : "ID + ID" =
+    <ID:Exp> " + " <ID:Exp>  
+  completion template Exp : "ID - ID" =
+    <ID:Exp> " - " <ID:Exp>  
+  completion template Exp : "ID * ID" =
+    <ID:Exp> " * " <ID:Exp>  
+  completion template Exp : "ID == ID" =
+    <ID:Exp> " == " <ID:Exp>  
+  completion template Exp : "ID < ID" =
+    <ID:Exp> " < " <ID:Exp>  
+  completion template Exp : "ID > ID" =
+    <ID:Exp> " > " <ID:Exp>  
+  completion template Exp : "ID <= ID" =
+    <ID:Exp> " <= " <ID:Exp>  
+  completion template Exp : "ID >= ID" =
+    <ID:Exp> " >= " <ID:Exp>  
+
+completions
+  
+
+completions
+  

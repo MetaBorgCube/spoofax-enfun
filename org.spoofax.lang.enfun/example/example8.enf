@@ -1,0 +1,41 @@
+module example8
+
+  // test new
+
+  entity Bool { }
+  entity Ordered {
+    function lt(that: Ordered): Bool
+    function gt(that: Ordered): Bool
+    function leq(that: Ordered): Bool
+    function geq(that: Ordered): Bool
+  }
+  entity Int : Ordered { 
+    function plus(that:Int): Int
+    function times(that:Int): Int
+    function minus(that:Int): Int
+    function div(that:Int): Int
+  }
+  
+  entity Point {
+    x : Int
+    y : Int
+    function sum(): Int {
+      return x + y;
+    }
+  } 
+  
+  entity ColoredPoint : Point {
+    color: Int
+  }
+  
+  entity Shape {
+    p : ColoredPoint
+    q : Point
+    function New(): Int {
+      p := ColoredPoint.new();
+      p := Point.new();
+      q := ColoredPoint.new();
+      q := Point.new();
+    }
+  }
+  

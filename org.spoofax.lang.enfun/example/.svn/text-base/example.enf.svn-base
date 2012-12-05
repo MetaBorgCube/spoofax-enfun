@@ -1,0 +1,109 @@
+module example
+
+  entity Ordered {
+    function lt(that: Ordered): Bool
+    function gt(that: Ordered): Bool
+    function leq(that: Ordered): Bool
+    function geq(that: Ordered): Bool
+  }
+  entity Int : Ordered { 
+    function plus(that:Int): Int
+    function times(that:Int): Int
+    function minus(that:Int): Int
+    function div(that:Int): Int
+  }
+  entity String {   
+    function plus(that:String): String
+  }
+  entity Bool {
+    function not(): Bool
+    function and(that: Bool): Bool
+    function or(that: Bool): Bool
+  }
+  entity Set<T> {
+    function add(x: T)
+    function remove(x: T)   
+  }
+  
+  entity User { 
+    firstName : String 
+    lastName  : String 
+    password  : String    
+    email     : String
+    isAdmin   : Bool
+    fullName  : String := (firstName + lastName)    
+    function rename(first: String, last: String) {
+      firstName := first.plus(isAdmin);
+      lastName := last;
+      return fullName;
+    } 
+  }
+  
+  entity Blog {
+    posts : Set<Post>
+    owner : User 
+    function newPost(): Post {
+      var p : Post := Post.new();
+      posts
+      .add(p);
+    }
+  }
+ 
+	entity Post {
+	  title  : String
+	  text   : String
+	  poster : User 
+	  body   : String
+	  url    : URL  
+	  name   : String 
+	  
+	  function toString(): String {
+	    //return title + "\n" + text;
+	    var s : String;
+	    s := title.plus(text);
+	    s := title + text;
+	    return s;
+	  }
+	}
+	  
+	entity URL {
+	  location : String
+	  function toString(): String {
+	    return location; 
+	  }
+	  function getThis(): URL {
+	  	return this;
+	  }
+	  function update(loc: String) {
+	    location := loc;
+	  }
+	}
+	
+	entity Foo {
+	  bar : BlogPost
+	  function bla() {   
+	    bla(); 
+	    var z : Int = bar.poster; 
+	    var b : URL = a; 
+	    z := 4;  
+	    var a : String := z;
+	    a := b.toString();
+	    bar := b;
+	    a := "";
+	    a := a;
+	    a := bar.toString();
+	  }
+	  function iftest(x: Int, y: String) {
+	    if(bar.name == 1) {
+	      bar.name := bar.name;
+	    } else if(y) {  
+	      x := 3;
+	    } else {
+	      bar.name := "";
+	    }
+	    while(true) {
+	      bar.name := bar.name + 1;
+	    }
+	  }
+	}
+	

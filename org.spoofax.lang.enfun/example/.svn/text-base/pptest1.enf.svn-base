@@ -1,0 +1,9 @@
+module pptest1
+
+entity Int { }
+
+entity A { prop : B function f() { } q: Int } entity B { }
+
+entity foo {
+	bar : A<>
+}

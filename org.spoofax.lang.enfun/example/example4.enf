@@ -1,0 +1,16 @@
+module example4o
+
+  entity String {   
+    function plus(that:String): String
+  }
+  
+  entity User { 
+    firstName : String 
+    lastName  : String 
+    fullName  : String
+    function rename(first: String, last: String) {
+      fullName := first + 0; // wrong argument type
+      fullName := first + last; // correct
+    }
+  }
+  

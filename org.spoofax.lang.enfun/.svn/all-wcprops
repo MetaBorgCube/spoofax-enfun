@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/repos/StrategoXT/!svn/ver/25360/spoofax-contrib/enfun/trunk
+END
+build.main.xml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/repos/StrategoXT/!svn/ver/25337/spoofax-contrib/enfun/trunk/build.main.xml
+END
+build.properties
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/repos/StrategoXT/!svn/ver/25337/spoofax-contrib/enfun/trunk/build.properties
+END
+build.generated.xml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/repos/StrategoXT/!svn/ver/25337/spoofax-contrib/enfun/trunk/build.generated.xml
+END
+.project
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/StrategoXT/!svn/ver/25337/spoofax-contrib/enfun/trunk/.project
+END
+plugin.xml
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/StrategoXT/!svn/ver/25337/spoofax-contrib/enfun/trunk/plugin.xml
+END
+.classpath
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/StrategoXT/!svn/ver/25337/spoofax-contrib/enfun/trunk/.classpath
+END

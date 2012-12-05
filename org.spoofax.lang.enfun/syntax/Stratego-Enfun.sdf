@@ -1,0 +1,43 @@
+module Stratego-Enfun
+
+imports
+  StrategoMix[StrategoHost]
+  Enfun
+  
+  exports
+
+  context-free start-symbols
+    Module[[StrategoHost]]
+
+  context-free syntax
+    
+    "|[" Definition "]|" -> Term [[StrategoHost]] {cons("ToMetaExpr")}    
+    "|[" Property   "]|" -> Term [[StrategoHost]] {cons("ToMetaExpr")}
+    "|[" Stat       "]|" -> Term [[StrategoHost]] {cons("ToMetaExpr")}
+    "|[" Exp        "]|" -> Term [[StrategoHost]] {cons("ToMetaExpr")}
+ 
+  variables
+    [xyzfg]    MetaVarSuffix              -> ID                  {prefer}
+    [xyzfg]    MetaVarSuffix "*"          -> {ID ","}*           {prefer}
+    "qid"      MetaVarSuffix              -> QId                 {prefer}
+    "lval"     MetaVarSuffix              -> LVal                {prefer}
+    "e"        MetaVarSuffix              -> Exp                 {prefer}
+    "e"        MetaVarSuffix "*"          -> {Exp ","}*          {prefer}
+    "t"        MetaVarSuffix              -> Type                {prefer}
+    "stat"     MetaVarSuffix              -> Stat                {prefer}
+    "stat"     MetaVarSuffix "*"          -> Stat*               {prefer}
+    
+    "arg"      MetaVarSuffix              -> Arg                 {prefer}
+    "arg"      MetaVarSuffix "*"          -> {Arg ","}*          {prefer}
+
+    [d]        MetaVarSuffix              -> Definition          {prefer}   
+    
+  lexical syntax
+
+    [0-9]*               -> MetaVarSuffix
+    "_" [A-Za-z0-9\_\-]+ -> MetaVarSuffix
+
+  lexical restrictions
+    MetaVarSuffix -/- [a-zA-Z0-9]
+    
+    

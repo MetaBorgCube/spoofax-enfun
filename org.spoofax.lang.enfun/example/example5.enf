@@ -1,0 +1,23 @@
+module example5
+
+  entity String {   
+    function plus(that:String): String
+  }
+  entity Bool { }
+  entity Set<T> {
+    function add(x: T)
+    function remove(x: T)
+    function member(x: T): Bool
+  }
+  
+  entity Blog {
+    posts : Set<Post>
+    function newPost(): Post {
+      var p : Post := Post.new();
+      posts.add(p);
+    }
+  }
+ 
+  entity Post {
+    title  : String
+  }

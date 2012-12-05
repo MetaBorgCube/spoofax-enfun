@@ -1,0 +1,20 @@
+/Users/guwac/Documents/svn/svn.strategoxt.org/StrategoXT/spoofax-contrib/enfun/trunk/include/enfun.ctree: \
+	/Users/guwac/Documents/svn/svn.strategoxt.org/StrategoXT/spoofax-contrib/enfun/trunk/trans/desugar.str \
+	/Users/guwac/Documents/svn/svn.strategoxt.org/StrategoXT/spoofax-contrib/enfun/trunk/trans/types.str \
+	/Users/guwac/Documents/svn/svn.strategoxt.org/StrategoXT/spoofax-contrib/enfun/trunk/trans/enfun.str \
+	/Users/guwac/Documents/svn/svn.strategoxt.org/StrategoXT/spoofax-contrib/enfun/trunk/lib/refactor-common.generated.str \
+	/Users/guwac/Documents/svn/svn.strategoxt.org/StrategoXT/spoofax-contrib/enfun/trunk/trans/refactor.str \
+	/Users/guwac/Documents/svn/svn.strategoxt.org/StrategoXT/spoofax-contrib/enfun/trunk/trans/generate.str \
+	/Users/guwac/Documents/svn/svn.strategoxt.org/StrategoXT/spoofax-contrib/enfun/trunk/trans/check.str \
+	/Users/guwac/Documents/svn/svn.strategoxt.org/StrategoXT/spoofax-contrib/enfun/trunk/trans/names.str \
+	/Users/guwac/Documents/svn/svn.strategoxt.org/StrategoXT/spoofax-contrib/enfun/trunk/syntax/pp-runtime.str \
+	/Users/guwac/Documents/svn/svn.strategoxt.org/StrategoXT/spoofax-contrib/enfun/trunk/syntax/Enfun.generated.str \
+	/Users/guwac/Documents/svn/svn.strategoxt.org/StrategoXT/spoofax-contrib/enfun/trunk/include/Enfun-parenthesize.str \
+	/Users/guwac/Documents/svn/svn.strategoxt.org/StrategoXT/spoofax-contrib/enfun/trunk/include/Enfun.str \
+	/Users/guwac/Documents/svn/svn.strategoxt.org/StrategoXT/spoofax-contrib/enfun/trunk/lib/nbl-library.generated.str \
+	/Users/guwac/Documents/svn/svn.strategoxt.org/StrategoXT/spoofax-contrib/enfun/trunk/lib/compilation-library.generated.str \
+	/Users/guwac/Documents/svn/svn.strategoxt.org/StrategoXT/spoofax-contrib/enfun/trunk/lib/analysis-library-internal.generated.str \
+	 \
+	/Users/guwac/Documents/svn/svn.strategoxt.org/StrategoXT/spoofax-contrib/enfun/trunk/lib/analysis-library.generated.str \
+	/Users/guwac/Documents/svn/svn.strategoxt.org/StrategoXT/spoofax-contrib/enfun/trunk/lib/index-library.generated.str \
+	/Users/guwac/Documents/svn/svn.strategoxt.org/StrategoXT/spoofax-contrib/enfun/trunk/lib/editor-common.generated.str

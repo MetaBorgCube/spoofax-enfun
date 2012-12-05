@@ -1,0 +1,9 @@
+module users
+
+imports library
+
+entity User {
+  email    : String
+  password : String
+  isAdmin  : Bool
+}

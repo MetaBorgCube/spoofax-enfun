@@ -1,0 +1,7 @@
+module users
+
+imports library
+
+  entity String { }
+  
+  entity User { first  : String<> last   : String<> }

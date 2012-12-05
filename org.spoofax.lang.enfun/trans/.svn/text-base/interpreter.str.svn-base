@@ -1,0 +1,144 @@
+module interpreter
+
+imports include/Enfun
+	
+signature 
+
+	constructors // values
+	
+	Int		:	INT 		-> Value
+	String: STRING 	-> Value
+	Null  : 					 Value
+	Ptr		:	String	-> Value
+	
+	constructors // stack
+		
+	Callee:																 Exp // marker for return value
+				: ID * Value 									-> Slot
+				: List(Slot)									-> Slots
+	Cont	: List(Stat)									-> Cont
+	Frame : ID * String * Slots * Cont 	-> Frame
+				: List(Frame)									-> Stack
+	
+	constructors // heap
+		
+	Object: ID * Slots 			-> Object
+				:	String * Object	-> HeapElem
+				: List(HeapElem)	-> Heap
+				
+	constructors // runtime state
+		
+	State : Stack * Heap 	-> State
+
+rules // values
+	
+	is-value = ?Int(_) + ?String(_) + ?Null() + ?Ptr(_)
+	
+	are-values = map(is-value)
+	
+rules // driver
+	
+	steps = repeat(step)
+	
+	step: State([Frame(fn, this, slots, cont)|f*], heap) -> State(stack', heap')
+		where
+			cont'  := <oncetd(where(eval(|this, slots, heap); ?result); ?origin; !result)> cont;
+			stack' := <update-stack(|this, origin, result)> [Frame(fn, this, slots, cont')|f*];
+			heap'  := <update-heap(|origin, result)> heap 
+			 
+	eval(|this, slots, heap) = eval
+	
+	update-stack(|this, origin, result) = try(!(origin, result, <id>); update-stack)
+	update-heap(|origin, result)  = try(!(origin, result, <id>); update-heap)
+	
+rules // integers
+	
+	eval: MethCall(Int(x), "plus", [Int(y)]) 	-> Int(z) where z := <addS> (x, y)
+	eval: MethCall(Int(x), "minus", [Int(y)]) -> Int(z) where z := <subtS> (x, y)
+	eval: MethCall(Int(x), "times", [Int(y)]) -> Int(z) where z := <mulS> (x, y)
+	
+	eval: MethCall(Int(x), "eq", [Int(y)]) 	-> Int(z) where z := <boolean(eq)> (x, y)
+	eval: MethCall(Int(x), "lt", [Int(y)]) 	-> Int(z) where z := <boolean(ltS)> (x, y)
+	eval: MethCall(Int(x), "gt", [Int(y)]) 	-> Int(z) where z := <boolean(gtS)> (x, y)  
+	eval: MethCall(Int(x), "leq", [Int(y)]) -> Int(z) where z := <boolean(leqS)> (x, y) 
+	eval: MethCall(Int(x), "geq", [Int(y)]) -> Int(z) where z := <boolean(geqS)> (x, y) 
+	
+	boolean(s) = s < !"1" + !"0"
+	
+rules // booleans
+	
+	eval: True() 	-> Int("1")
+	eval: False() -> Int("0")
+	
+	eval: MethCall(Int("0"), "not", []) 				-> Int("1")
+	eval: MethCall(Int("1"), "not", []) 				-> Int("0")
+	eval: MethCall(Int("0"), "and", [_]) 				-> Int("0")
+	eval: MethCall(Int("1"), "and", [Int("0")]) -> Int("0")
+	eval: MethCall(Int("1"), "and", [Int("1")]) -> Int("1")
+	eval: MethCall(Int("1"), "or", [_]) 				-> Int("1")
+	eval: MethCall(Int("0"), "or", [Int("1")]) 	-> Int("1")
+	eval: MethCall(Int("0"), "or", [Int("0")]) 	-> Int("0")
+	
+rules // strings, should be replaced by heap objects
+	
+	eval: MethCall(String(x), "plus", [String(y)]) 	-> String(z) where z := <conc> (x, y)
+	eval: MethCall(String(x), "eq", [String(y)]) 		-> Int(z) where z := <boolean(eq)> (x, y) 
+	
+rules // variables & properties
+	
+	eval(|this, slots, heap): Var(x) -> val
+		where
+			val := <lookup> (x, slots) 
+			
+	eval(|this, slots, heap): This() -> Ptr(this)
+	
+	eval(|this, slots, heap): PropAccess(Ptr(p), prop) -> val
+		where
+			Object(_, props) 	:= <lookup> (p, heap);
+			val								:= <lookup> (prop, props)
+	
+	eval: New(c) -> Ptr(<new>)
+	
+	update-heap: (New(c), Ptr(p), heap) -> [(p, Object(c, slots))|heap]
+		where
+			slots := [] // TODO: initialise properties
+			
+rules // functions
+	
+	eval: ThisCall(m, a*) 				-> Callee() where <are-values> a*
+	eval: MethCall(Ptr(p), m, a*) -> Callee() where <are-values> a*
+	eval: [Return(v)|_]						-> [] where <is-value> v
+	eval: Cont([])								-> Cont([])
+	
+	update-stack: (ThisCall(m, a*), Callee(), stack@[Frame(_, this, _, _)|_]) -> [Frame(m', this, slots, cont)|stack]
+		where
+			m' 		:= m;  // TODO: dynamic lookup
+			slots := []; // TODO: initialise slots with arguments
+			cont  := []  // TODO: initialise statements from dynamic lookup
+	
+	update-stack: (MethCall(Ptr(p), m, a*), Callee(), stack) -> [Frame(m', p, slots, cont)|stack]
+		where
+			m' 		:= m;  // TODO: dynamic lookup
+			slots := []; // TODO: initialise slots with arguments
+			cont  := []  // TODO: initialise statements from dynamic lookup
+	
+	update-stack: ([Return(v)|_], [], [_|f*]) 	-> <oncetd(return(|v))> f*
+	update-stack: (Cont([]), Cont([]), [_|f*]) 	-> <oncetd(return)> f*
+	 
+	return(|v): Callee() 						-> v
+	return		: [Exp(Callee())|st*] -> st*
+	
+rules // statements
+	
+	eval: [Exp(v)|st*] 		-> st* where <is-value> v
+	eval: [Block([])|st*] -> st*
+
+rules // control flow
+
+	eval: IfElse(Int("1"), st*, _, _) 														-> Block(st*)
+	eval: [IfElse(Int("0"), _, [], None())|st*]										-> st*
+	eval: IfElse(Int("0"), _, [], Some(Else(st*))) 								-> Block(st*)
+	eval: IfElse(Int("0"), _, [ElseIf(c, st*)|elseif*], optelse) 	-> IfElse(c, st*, elseif*, optelse)
+	
+	eval: w@While(c, st*) -> IfElse(c, [Block(st*), w], [], None())
+	

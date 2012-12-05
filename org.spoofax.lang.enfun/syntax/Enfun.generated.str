@@ -1,0 +1,627 @@
+specification
+
+strategies
+  prettyprint-Module =
+    ?Module(a, b)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ S("module ")
+           , <pp-one-Z(prettyprint-ID)> a
+           ]
+         )
+       , H(
+           []
+         , [S("")]
+         )
+       , H(
+           [SOpt(HS(), "0")]
+         , [<pp-V-list(prettyprint-Definition|"1")> b]
+         )
+       ]
+
+  prettyprint-Definition =
+    ?Imports(a)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ S("imports ")
+           , <pp-one-Z(prettyprint-ID)> a
+           ]
+         )
+       ]
+
+  prettyprint-example =
+    prettyprint-Module
+
+  prettyprint-example =
+    prettyprint-Definition
+
+
+strategies
+  prettyprint-Definition =
+    ?Entity(a, b, c, d)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ S("entity ")
+           , <pp-one-Z(prettyprint-ID)> a
+           , <pp-option(pp-one-Z(prettyprint-TypeParams))> b
+           , S(" ")
+           , <pp-option(pp-one-Z(prettyprint-Extension))> c
+           , S(" {")
+           ]
+         )
+       , <pp-indent(|"2")> [<pp-V-list(prettyprint-Property)> d]
+       , H(
+           [SOpt(HS(), "0")]
+         , [S("}")]
+         )
+       ]
+
+  prettyprint-Extension =
+    ?Extends(a)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ S(": ")
+           , <pp-one-Z(prettyprint-ID)> a
+           ]
+         )
+       ]
+
+  prettyprint-Type =
+    ?Type0(a)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [<pp-one-Z(prettyprint-ID)> a]
+         )
+       ]
+
+  prettyprint-Type =
+    ?Type(a, b)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ <pp-one-Z(prettyprint-ID)> a
+           , S("<")
+           , <pp-H-list(prettyprint-Type|",")> b
+           , S(">")
+           ]
+         )
+       ]
+
+  prettyprint-TypeParams =
+    ?TypeParams(a)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ S("<")
+           , <pp-H-list(prettyprint-TypeParam|",")> a
+           , S(">")
+           ]
+         )
+       ]
+
+  prettyprint-TypeParam =
+    ?TypeParam(a)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [<pp-one-Z(prettyprint-ID)> a]
+         )
+       ]
+
+  prettyprint-example =
+    prettyprint-Definition
+
+  prettyprint-example =
+    prettyprint-Extension
+
+  prettyprint-example =
+    prettyprint-Type
+
+  prettyprint-example =
+    prettyprint-TypeParams
+
+  prettyprint-example =
+    prettyprint-TypeParam
+
+
+strategies
+  prettyprint-Property =
+    ?Property(a, b, c)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ <pp-one-Z(prettyprint-ID)> a
+           , S(" : ")
+           , <pp-one-Z(prettyprint-Type)> b
+           , S(" ")
+           , <pp-option(pp-one-Z(prettyprint-PropInit))> c
+           ]
+         )
+       ]
+
+  prettyprint-PropInit =
+    ?Init(a)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ S(":= ")
+           , <pp-one-Z(prettyprint-Exp)> a
+           ]
+         )
+       ]
+
+  prettyprint-Exp =
+    ?PropAccess(a, b)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ <pp-one-Z(prettyprint-Exp)> a
+           , S(".")
+           , <pp-one-Z(prettyprint-ID)> b
+           ]
+         )
+       ]
+
+  prettyprint-Exp =
+    ?This()
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [S("this")]
+         )
+       ]
+
+  prettyprint-Exp =
+    ?New(a)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ <pp-one-Z(prettyprint-Type)> a
+           , S(".new()")
+           ]
+         )
+       ]
+
+  prettyprint-example =
+    prettyprint-Property
+
+  prettyprint-example =
+    prettyprint-PropInit
+
+  prettyprint-example =
+    prettyprint-Exp
+
+
+strategies
+  prettyprint-Property =
+    ?FunDecl(a, b, c)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ S("function ")
+           , <pp-one-Z(prettyprint-ID)> a
+           , S(" (")
+           , <pp-H-list(prettyprint-Arg|",")> b
+           , S(") ")
+           , <pp-option(pp-one-Z(prettyprint-ReturnType))> c
+           ]
+         )
+       ]
+
+  prettyprint-Property =
+    ?FunDef(a, b, c, d)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ S("function ")
+           , <pp-one-Z(prettyprint-ID)> a
+           , S(" (")
+           , <pp-H-list(prettyprint-Arg|",")> b
+           , S(") ")
+           , <pp-option(pp-one-Z(prettyprint-ReturnType))> c
+           , S(" {")
+           ]
+         )
+       , <pp-indent(|"2")> [<pp-H-list(prettyprint-Stat)> d]
+       , H(
+           [SOpt(HS(), "0")]
+         , [S("}")]
+         )
+       ]
+
+  prettyprint-Exp =
+    ?ThisCall(a, b)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ <pp-one-Z(prettyprint-ID)> a
+           , S("(")
+           , <pp-H-list(prettyprint-Exp|",")> b
+           , S(")")
+           ]
+         )
+       ]
+
+  prettyprint-Exp =
+    ?MethCall(a, b, c)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ <pp-one-Z(prettyprint-Exp)> a
+           , S(".")
+           , <pp-one-Z(prettyprint-ID)> b
+           , S("(")
+           , <pp-H-list(prettyprint-Exp|",")> c
+           , S(")")
+           ]
+         )
+       ]
+
+  prettyprint-Arg =
+    ?Arg(a, b)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ <pp-one-Z(prettyprint-ID)> a
+           , S(" : ")
+           , <pp-one-Z(prettyprint-Type)> b
+           ]
+         )
+       ]
+
+  prettyprint-ReturnType =
+    ?a
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ S(": ")
+           , <pp-one-Z(prettyprint-Type)> a
+           ]
+         )
+       ]
+
+  prettyprint-Stat =
+    ?Return(a)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ S("return ")
+           , <pp-one-Z(prettyprint-Exp)> a
+           , S(";")
+           ]
+         )
+       ]
+
+  prettyprint-example =
+    prettyprint-Property
+
+  prettyprint-example =
+    prettyprint-Exp
+
+  prettyprint-example =
+    prettyprint-Arg
+
+  prettyprint-example =
+    prettyprint-ReturnType
+
+  prettyprint-example =
+    prettyprint-Stat
+
+
+strategies
+  prettyprint-Stat =
+    ?Exp(a)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ <pp-one-Z(prettyprint-Exp)> a
+           , S(";")
+           ]
+         )
+       ]
+
+  prettyprint-Stat =
+    ?Block(a)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [S("{")]
+         )
+       , <pp-indent(|"4")> [<pp-H-list(prettyprint-Stat)> a]
+       , <pp-indent(|"2")> [S("}")]
+       ]
+
+  prettyprint-example =
+    prettyprint-Stat
+
+
+strategies
+  prettyprint-Stat =
+    ?IfElse(a, b, c, d)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ S("if(")
+           , <pp-one-Z(prettyprint-Exp)> a
+           , S(") {")
+           ]
+         )
+       , <pp-indent(|"2")> [<pp-H-list(prettyprint-Stat)> b]
+       , H(
+           [SOpt(HS(), "0")]
+         , [<pp-H-list(prettyprint-ElseIf)> c]
+         )
+       , H(
+           [SOpt(HS(), "0")]
+         , [<pp-option(pp-one-Z(prettyprint-Else))> d]
+         )
+       , H(
+           [SOpt(HS(), "0")]
+         , [S("}")]
+         )
+       ]
+
+  prettyprint-ElseIf =
+    ?ElseIf(a, b)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ S("} else if (")
+           , <pp-one-Z(prettyprint-Exp)> a
+           , S(") {")
+           ]
+         )
+       , <pp-indent(|"2")> [<pp-H-list(prettyprint-Stat)> b]
+       ]
+
+  prettyprint-Else =
+    ?Else(a)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [S("} else {")]
+         )
+       , <pp-indent(|"2")> [<pp-H-list(prettyprint-Stat)> a]
+       ]
+
+  prettyprint-Stat =
+    ?While(a, b)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ S("while(")
+           , <pp-one-Z(prettyprint-Exp)> a
+           , S(") {")
+           ]
+         )
+       , <pp-indent(|"2")> [<pp-H-list(prettyprint-Stat)> b]
+       , H(
+           [SOpt(HS(), "0")]
+         , [S("}")]
+         )
+       ]
+
+  prettyprint-example =
+    prettyprint-ElseIf
+
+  prettyprint-example =
+    prettyprint-Else
+
+  prettyprint-example =
+    prettyprint-Stat
+
+
+strategies
+  prettyprint-Stat =
+    ?VarDecl(a, b)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ S("var ")
+           , <pp-one-Z(prettyprint-ID)> a
+           , S(" : ")
+           , <pp-one-Z(prettyprint-Type)> b
+           , S(";")
+           ]
+         )
+       ]
+
+  prettyprint-Stat =
+    ?VarDeclInit(a, b, c)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ S("var ")
+           , <pp-one-Z(prettyprint-ID)> a
+           , S(" : ")
+           , <pp-one-Z(prettyprint-Type)> b
+           , S(" := ")
+           , <pp-one-Z(prettyprint-Exp)> c
+           , S(";")
+           ]
+         )
+       ]
+
+  prettyprint-Exp =
+    ?Var(a)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [<pp-one-Z(prettyprint-ID)> a]
+         )
+       ]
+
+  prettyprint-Stat =
+    ?Assign(a, b)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ <pp-one-Z(prettyprint-Exp)> a
+           , S(" := ")
+           , <pp-one-Z(prettyprint-Exp)> b
+           , S(";")
+           ]
+         )
+       ]
+
+  prettyprint-example =
+    prettyprint-Exp
+
+  prettyprint-example =
+    prettyprint-Stat
+
+
+strategies
+  prettyprint-Exp =
+    ?Parenthetical(a)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ S("(")
+           , <pp-one-Z(prettyprint-Exp)> a
+           , S(")")
+           ]
+         )
+       ]
+
+  prettyprint-Exp =
+    ?True()
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [S("true")]
+         )
+       ]
+
+  prettyprint-Exp =
+    ?False()
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [S("false")]
+         )
+       ]
+
+  prettyprint-Exp =
+    ?Not(a)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ S("!")
+           , <pp-one-Z(prettyprint-Exp)> a
+           ]
+         )
+       ]
+
+  prettyprint-Exp =
+    ?And(a, b)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ <pp-one-Z(prettyprint-Exp)> a
+           , S(" && ")
+           , <pp-one-Z(prettyprint-Exp)> b
+           ]
+         )
+       ]
+
+  prettyprint-Exp =
+    ?Or(a, b)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ <pp-one-Z(prettyprint-Exp)> a
+           , S(" || ")
+           , <pp-one-Z(prettyprint-Exp)> b
+           ]
+         )
+       ]
+
+  prettyprint-example =
+    prettyprint-Exp
+
+
+strategies
+  prettyprint-Exp =
+    ?Int(a)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [<pp-one-Z(prettyprint-INT)> a]
+         )
+       ]
+
+  prettyprint-Exp =
+    ?Plus(a, b)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ <pp-one-Z(prettyprint-Exp)> a
+           , S(" + ")
+           , <pp-one-Z(prettyprint-Exp)> b
+           ]
+         )
+       ]
+
+  prettyprint-Exp =
+    ?Minus(a, b)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ <pp-one-Z(prettyprint-Exp)> a
+           , S(" - ")
+           , <pp-one-Z(prettyprint-Exp)> b
+           ]
+         )
+       ]
+
+  prettyprint-Exp =
+    ?Mul(a, b)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ <pp-one-Z(prettyprint-Exp)> a
+           , S(" * ")
+           , <pp-one-Z(prettyprint-Exp)> b
+           ]
+         )
+       ]
+
+  prettyprint-Exp =
+    ?Eq(a, b)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ <pp-one-Z(prettyprint-Exp)> a
+           , S(" == ")
+           , <pp-one-Z(prettyprint-Exp)> b
+           ]
+         )
+       ]
+
+  prettyprint-Exp =
+    ?Lt(a, b)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ <pp-one-Z(prettyprint-Exp)> a
+           , S(" < ")
+           , <pp-one-Z(prettyprint-Exp)> b
+           ]
+         )
+       ]
+
+  prettyprint-Exp =
+    ?Gt(a, b)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ <pp-one-Z(prettyprint-Exp)> a
+           , S(" > ")
+           , <pp-one-Z(prettyprint-Exp)> b
+           ]
+         )
+       ]
+
+  prettyprint-Exp =
+    ?Leq(a, b)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ <pp-one-Z(prettyprint-Exp)> a
+           , S(" <= ")
+           , <pp-one-Z(prettyprint-Exp)> b
+           ]
+         )
+       ]
+
+  prettyprint-Exp =
+    ?Geq(a, b)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ <pp-one-Z(prettyprint-Exp)> a
+           , S(" >= ")
+           , <pp-one-Z(prettyprint-Exp)> b
+           ]
+         )
+       ]
+
+  prettyprint-example =
+    prettyprint-Exp
+
+
+strategies
+  prettyprint-Exp =
+    ?String(a)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [<pp-one-Z(prettyprint-STRING)> a]
+         )
+       ]
+
+  prettyprint-example =
+    prettyprint-Exp
+
+
+strategies

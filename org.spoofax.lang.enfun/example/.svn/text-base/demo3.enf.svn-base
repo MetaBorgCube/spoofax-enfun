@@ -1,0 +1,5 @@
+module demo3
+entity User {
+  first : String
+  
+}

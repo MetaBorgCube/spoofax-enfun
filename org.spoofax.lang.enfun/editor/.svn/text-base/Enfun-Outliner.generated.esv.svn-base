@@ -1,0 +1,24 @@
+module Enfun-Outliner.generated
+
+outliner Default outliner        
+  
+  
+  // Outliner rules indicate which syntactic constructs should be shown in the outline
+  // and quick outline views, and take one of the following forms:
+  //
+  //   <sort>.<constructor>
+  //
+  //   <sort>._
+  //
+  //   _.<constructor>
+  
+  Module.Module
+  Definition.Entity
+  Type.Type
+  Exp.ThisCall
+  Exp.MethCall
+  Property.FunDecl
+  Property.FunDef
+  Stat.IfElse
+  ElseIf.ElseIf
+  Stat.While

@@ -1,0 +1,19 @@
+module demo6
+
+imports library
+
+entity Bool { }
+entity String { }
+entity Int { }
+
+entity Int {
+  function value(): Int 
+  function fact(n: Int): Int {
+    if(n == 0) { 
+      return 1;
+    } else {
+      return this * fact(n - 1);
+    }
+  }
+}
+

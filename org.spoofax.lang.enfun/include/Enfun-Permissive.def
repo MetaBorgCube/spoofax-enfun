@@ -1,0 +1,218 @@
+definition
+
+module Enfungenerated
+exports
+  sorts WATER WATERTOKEN WATERTOKENSTART WATERTOKENSEPARATOR WATERTOKENSTAR
+
+  lexical syntax
+    ~[A-Za-z0-9\_]                 -> WATERTOKENSTART     {recover, avoid}
+    WATERTOKENSTART [A-Za-z0-9\_]* -> WATERTOKEN          
+    ~[A-Za-z0-9\_\ \t\12\r\n\*]    -> WATERTOKENSEPARATOR {recover, avoid}
+    "*"                            -> WATERTOKENSTAR      {recover, avoid}
+    WATERTOKEN                     -> WATER               
+    WATERTOKENSEPARATOR            -> WATER               
+    WATERTOKENSTAR                 -> WATER               
+                                   -> WATEREOF            
+
+  lexical restrictions
+    WATERTOKEN -/- [A-Za-z0-9\_]
+    WATERTOKENSTAR -/- [\/]
+
+  context-free syntax
+    WATER -> LAYOUT {cons("WATER")}
+
+  (
+
+  sorts WATEREOF
+
+  lexical restrictions
+    WATEREOF -/- ~[]
+
+  lexical syntax
+    %% Lexical insertion recovery rules                              
+                                                  -> "module"        {recover, cons("INSERTION")}
+                                                  -> "imports"       {recover, cons("INSERTION")}
+                                                  -> "entity"        {recover, cons("INSERTION")}
+                                                  -> ">"             {recover, cons("INSERTION")}
+                                                  -> "<"             {recover, cons("INSERTION")}
+                                                  -> ":="            {recover, cons("INSERTION")}
+                                                  -> "function"      {recover, cons("INSERTION")}
+                                                  -> "("             {recover, cons("INSERTION")}
+                                                  -> "{"             {recover, cons("INSERTION")}
+                                                  -> ","             {recover, cons("INSERTION")}
+                                                  -> ":"             {recover, cons("INSERTION")}
+                                                  -> "}"             {recover, cons("INSERTION")}
+                                                  -> ";"             {recover, cons("INSERTION")}
+                                                  -> ")"             {recover, cons("INSERTION")}
+    "\""                                          -> INSERTOPENQUOTE {recover}
+    INSERTOPENQUOTE StringChar* "\n"              -> STRING          {cons("INSERTEND")}
+    INSERTOPENQUOTE StringChar* WATEREOF          -> STRING          {cons("INSERTEND")}
+    "/*"                                          -> INSERTSTART     {recover}
+    INSERTSTART ( ~[\*] | CommentChar )* WATEREOF -> LAYOUT          {cons("INSERTEND")}
+
+  syntax
+    %% Kernel syntax insertion recovery rules   
+
+  )
+
+  (
+
+  context-free syntax
+    "module" ID Definition* -> Module     {cons("Module")}
+    "imports" ID            -> Definition {cons("Imports")}
+
+  context-free syntax
+    CONTENTCOMPLETE -> Module     {cons("COMPLETION-Module")}
+    CONTENTCOMPLETE -> Definition {cons("COMPLETION-Definition")}
+
+  context-free syntax
+    "entity" ID TypeParams? Extension? "{" Property* "}" -> Definition {cons("Entity")}
+    ":" ID                                               -> Extension  {cons("Extends")}
+    ID                                                   -> Type       {cons("Type0")}
+    ID "<" {Type ","}* ">"                               -> Type       {cons("Type")}
+    "<" {TypeParam ","}* ">"                             -> TypeParams {cons("TypeParams")}
+    ID                                                   -> TypeParam  {cons("TypeParam")}
+
+  context-free syntax
+    CONTENTCOMPLETE -> Definition {cons("COMPLETION-Definition")}
+    CONTENTCOMPLETE -> Extension  {cons("COMPLETION-Extension")}
+    CONTENTCOMPLETE -> Type       {cons("COMPLETION-Type")}
+    CONTENTCOMPLETE -> TypeParams {cons("COMPLETION-TypeParams")}
+    CONTENTCOMPLETE -> TypeParam  {cons("COMPLETION-TypeParam")}
+
+  context-free syntax
+    ID ":" Type PropInit? -> Property {cons("Property")}
+    ":=" Exp              -> PropInit {cons("Init")}
+    Exp "." ID            -> Exp      {cons("PropAccess")}
+    "this"                -> Exp      {cons("This"), prefer}
+    Type ".new" "()"      -> Exp      {cons("New")}
+
+  context-free syntax
+    CONTENTCOMPLETE -> Property {cons("COMPLETION-Property")}
+    CONTENTCOMPLETE -> PropInit {cons("COMPLETION-PropInit")}
+    CONTENTCOMPLETE -> Exp      {cons("COMPLETION-Exp")}
+
+  context-free syntax
+    "function" ID "(" {Arg ","}* ")" ReturnType?               -> Property   {cons("FunDecl")}
+    "function" ID "(" {Arg ","}* ")" ReturnType? "{" Stat* "}" -> Property   {cons("FunDef")}
+    ID "(" {Exp ","}* ")"                                      -> Exp        {cons("ThisCall")}
+    Exp "." ID "(" {Exp ","}* ")"                              -> Exp        {cons("MethCall")}
+    ID ":" Type                                                -> Arg        {cons("Arg")}
+    ":" Type                                                   -> ReturnType 
+    "return" Exp ";"                                           -> Stat       {cons("Return")}
+
+  context-free syntax
+    CONTENTCOMPLETE -> Property   {cons("COMPLETION-Property")}
+    CONTENTCOMPLETE -> Exp        {cons("COMPLETION-Exp")}
+    CONTENTCOMPLETE -> Arg        {cons("COMPLETION-Arg")}
+    CONTENTCOMPLETE -> ReturnType {cons("COMPLETION-ReturnType")}
+    CONTENTCOMPLETE -> Stat       {cons("COMPLETION-Stat")}
+
+  context-free syntax
+    Exp ";"       -> Stat {cons("Exp")}
+    "{" Stat* "}" -> Stat {cons("Block")}
+    "(" Stat* ")" -> Stat {cons("Seq")}
+
+  context-free syntax
+    CONTENTCOMPLETE -> Stat {cons("COMPLETION-Stat")}
+
+  context-free syntax
+    "if" "(" Exp ")" "{" Stat* ElseIf* Else? "}" -> Stat   {cons("IfElse")}
+    "}" "else" "if" "(" Exp ")" "{" Stat*        -> ElseIf {cons("ElseIf")}
+    "}" "else" "{" Stat*                         -> Else   {cons("Else")}
+    "while" "(" Exp ")" "{" Stat* "}"            -> Stat   {cons("While")}
+
+  context-free syntax
+    CONTENTCOMPLETE -> ElseIf {cons("COMPLETION-ElseIf")}
+    CONTENTCOMPLETE -> Else   {cons("COMPLETION-Else")}
+    CONTENTCOMPLETE -> Stat   {cons("COMPLETION-Stat")}
+
+  context-free syntax
+    "var" ID ":" Type ";"          -> Stat {cons("VarDecl")}
+    "var" ID ":" Type ":=" Exp ";" -> Stat {cons("VarDeclInit")}
+    ID                             -> Exp  {cons("Var")}
+    Exp ":=" Exp ";"               -> Stat {cons("Assign")}
+
+  context-free syntax
+    CONTENTCOMPLETE -> Exp  {cons("COMPLETION-Exp")}
+    CONTENTCOMPLETE -> Stat {cons("COMPLETION-Stat")}
+
+  context-free syntax
+    "(" Exp ")"  -> Exp {bracket}
+    "true"       -> Exp {cons("True")}
+    "false"      -> Exp {cons("False")}
+    "!" Exp      -> Exp {cons("Not")}
+    Exp "&&" Exp -> Exp {cons("And"), left}
+    Exp "||" Exp -> Exp {cons("Or"), left}
+
+  context-free syntax
+    CONTENTCOMPLETE -> Exp {cons("COMPLETION-Exp")}
+
+  context-free syntax
+    INT          -> Exp {cons("Int")}
+    Exp "+" Exp  -> Exp {cons("Plus"), left}
+    Exp "-" Exp  -> Exp {cons("Minus"), left}
+    Exp "*" Exp  -> Exp {cons("Mul"), left}
+    Exp "==" Exp -> Exp {cons("Eq"), non-assoc}
+    Exp "<" Exp  -> Exp {cons("Lt"), non-assoc}
+    Exp ">" Exp  -> Exp {cons("Gt"), non-assoc}
+    Exp "<=" Exp -> Exp {cons("Leq"), non-assoc}
+    Exp ">=" Exp -> Exp {cons("Geq"), non-assoc}
+
+  context-free syntax
+    CONTENTCOMPLETE -> Exp {cons("COMPLETION-Exp")}
+
+  context-free syntax
+    STRING -> Exp {cons("String")}
+
+  context-free syntax
+    CONTENTCOMPLETE -> Exp {cons("COMPLETION-Exp")}
+
+  context-free syntax
+    
+
+  )
+
+module Common
+exports
+  lexical syntax
+    [a-zA-Z] [a-zA-Z0-9]*              -> ID            
+    "-"? [0-9]+                        -> INT           
+    "\"" StringChar* "\""              -> STRING        
+    ~[\"\n]                            -> StringChar    
+    "\\\""                             -> StringChar    
+    BackSlashChar                      -> StringChar    
+    "\\"                               -> BackSlashChar 
+    [\ \t\n\r]                         -> LAYOUT        
+    [\*]                               -> CommentChar   
+    "/*" ( ~[\*] | CommentChar )* "*/" -> LAYOUT        
+    "//" ~[\n\r]* [\n\r] | EOF         -> LAYOUT        
+                                       -> EOF           
+
+  lexical restrictions
+    CommentChar -/- [\/]
+    INT -/- [0-9]
+    ID -/- [a-zA-Z0-9\_]
+    EOF -/- ~[]
+    BackSlashChar -/- [\"]
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\r]
+    LAYOUT? -/- [\/] . [\/]
+    LAYOUT? -/- [\/] . [\*]
+
+module Enfun
+imports Common
+
+imports Enfungenerated
+
+exports
+  context-free start-symbols
+    Start Definition Exp Property Stat
+
+  context-free syntax
+    Module -> Start 
+
+  lexical syntax
+    "true" | "false" | "new" | "return" -> Keyword 
+    Keyword                             -> ID      {reject}
