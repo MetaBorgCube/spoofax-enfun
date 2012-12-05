@@ -20,7 +20,7 @@ builders
   builder  : "Show desugared AST"                  = debug-desugar-aterm (openeditor) (realtime) (meta) (source)           
   builder  : "Show normalized AST"                 = debug-normalize-aterm (openeditor) (realtime) (meta) (source)           
   builder  : "Show deffed syntax"                  = debug-generate-deffed (openeditor) (realtime) (meta) (source)          
-  builder  : "Show analyzed syntax"                = debug-generate-analyzed (openeditor) (realtime) (meta) (source)        
+  builder  : "Show analyzed syntax"                = debug-generate-aterm (openeditor) (realtime) (meta) //(source)        
   builder  : "Show index entries for current file" = debug-index-show-current-file (openeditor) (realtime) (meta) (source)  
   builder  : "Show index entries for all files"    = debug-index-show-all-files (openeditor) (realtime) (meta) (source)     
   builder  : "Clear index for current file"        = debug-index-clear-current (meta) (source)                              
