@@ -1,1 +1,0 @@
-Module("generate",[Imports([(),(),(),(),(),()]),Rules([SDefT("index-compile-ast",[],[VarDec("file",ConstType(SortNoArgs("ATerm"))),VarDec("subfile",ConstType(SortNoArgs("ATerm")))],[])]),Rules([SDefT("to-java",[],[],[]),SDefT("to-java",[],[],[]),SDefT("to-java",[],[],[]),SDefT("to-java",[],[],[]),SDefT("to-java",[],[],[]),SDefT("to-java",[],[],[]),SDefT("to-java",[],[],[])])])

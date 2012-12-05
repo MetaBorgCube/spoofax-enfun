@@ -1,5 +1,0 @@
-module application
-
-imports library
-imports users
-imports frontend
