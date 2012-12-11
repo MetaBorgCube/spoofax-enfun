@@ -39,7 +39,11 @@ rules // Analysis
       
       partition := $[[project-path]/[path]];
       index-setup(|<language>, [project-path], partition);
-      <filter(?Def(_)); index-add-all(|partition)> defs
+      <index-clear-file> partition;
+      <filter(\Def(x) -> Def(<to-index-path> x)\; index-add(|partition))> defs
+      
+   to-index-path:
+   	 [(ns, name, _)|tail] -> [ns, name|<map(?(_, <id>, _))> tail]
 
 // 	// Analyzes the current program, returning a tuple with the analyzed AST, errors, warnings, notes and
 // 	// files that should be re-analyzed.
@@ -81,10 +85,10 @@ rules // Editor services
 
   editor-resolve:
     (node, position, ast, path, project-path) -> definition
- 		where
+    where
     	index-setup(|<language>, [project-path], $[[project-path]/[path]]);
     	_{Use(use-path)} := node;
-    	definition :=<index-get> Def(use-path)
+    	definition := <index-get> Def(<to-index-path> use-path)
  			
   // // Resolves a reference when the user control-clicks or presses F3 in the editor.
   // editor-resolve:
