@@ -57,7 +57,7 @@ rules // types
 	nbl-prop-site(tasks|paths) =
 		?Entity(e, ps, _, _);
 		vdebug(!"enter ");
-		where ((result, task) := <new-task> PropCalc(Type(), ps));
+		where ((result, task) := <new-task(|[])> PropCalc(Type(), ps));
 		Entity(nbl-props(?task*|[Prop((Type(), e), Type(), Type(e, result))]), id, id, id);
 		vdebug(!"leave ");
 		match(tasks|[task*, task])
@@ -91,7 +91,7 @@ rules // properties
 	nbl-prop-site(tasks|paths) =
 		?Property(p, t, _);
 		vdebug(!"enter ");
-		where ((result, task) := <new-task> PropCalc(Type(), t));
+		where ((result, task) := <new-task(|[])> PropCalc(Type(), t));
 		Property(nbl-props(?task*|[Prop((Property(), p), Type(), result)]), id, id);
 		vdebug(!"leave ");
 		match(tasks|[task|task*])
@@ -99,8 +99,8 @@ rules // properties
 	nbl-use-site(tasks|paths) =
 		?PropAccess(e, p);
 		vdebug(!"enter ");
-		where ((result1, task1) := <new-task> PropCalc(Type(), e));
-		where ((result2, task2) := <new-task> Match("match1", result1));
+		where ((result1, task1) := <new-task(|[])> PropCalc(Type(), e));
+		where ((result2, task2) := <new-task(|[<?Result(<id>)> result1])> Match("match1", result1));
 		PropAccess(id, nbl-use(?tasks|paths, [Candidate(Property(), [], Context(result2, Type(), [], Current()), [])]));
 		vdebug(!"leave ");
 		match(tasks|[task1, task2|tasks])
