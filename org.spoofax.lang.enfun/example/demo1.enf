@@ -2,6 +2,9 @@ module users
 
 //imports library
 
-  entity String { }
+  entity String { 
+  	a : String 
+  	b : String := a.a
+  }
   
-  entity User { first  : String<> last   : String<> }
+  entity User { first  : String<> last   : String<> } 

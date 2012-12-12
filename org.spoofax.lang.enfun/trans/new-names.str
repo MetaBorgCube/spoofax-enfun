@@ -17,12 +17,15 @@ signature constructors
 
 rules // type property
 	
-	type-of               = fail
-	match-type(|def-type) = fail
+	type-of = fail
 	
-	calc-property            : PropCalc(Type(), x)  -> <type-of> x
-	match-property(|def-type): PropMatch(Type(), x) -> <match-type(|def-type)> x
-
+	type-of = is-list; map(type-of)
+	type-of : None() -> []
+  type-of : Type(t, ts) -> Type(t, <type-of> ts)
+  
+	calc-property(|elems): (Type(), x)  -> <type-of> x
+	calc-property(|elems): (Type(), Var(x)) -> <calc-property(|elems)> (Type(), x)
+	
 rules // modules
 	
 	nbl-def-site(cpaths, spaths, tasks|paths) =
@@ -54,8 +57,10 @@ rules // types
 	nbl-prop-site(tasks|paths) =
 		?Entity(e, ps, _, _);
 		vdebug(!"enter ");
-		Entity(nbl-props(tasks|[Prop((Type(), e), Type(), Type(e, PropCalc(Type(), ps)))]), id, id, id);
-		vdebug(!"leave ")	
+		where ((result, task) := <new-task> PropCalc(Type(), ps));
+		Entity(nbl-props(?task*|[Prop((Type(), e), Type(), Type(e, result))]), id, id, id);
+		vdebug(!"leave ");
+		match(tasks|[task*, task])
 
 	nbl-prop-site(tasks|paths) =
 		?TypeParam(t);
@@ -74,7 +79,40 @@ rules // types
 		vdebug(!"enter ");
 		Extends(nbl-use(tasks|paths, [Candidate(Type(), [], Current(), [])]));
 		vdebug(!"leave ")
-// 	
+
+rules // properties
+	
+	nbl-def-site(cpaths, spaths, tasks|paths) =		
+		?Property(p, t, _);
+		vdebug(!"enter ");
+		Property(nbl-def(cpaths, spaths, tasks|paths, Property(), Unique(), [Current()], []), id, id);
+		vdebug(!"leave ")
+
+	nbl-prop-site(tasks|paths) =
+		?Property(p, t, _);
+		vdebug(!"enter ");
+		where ((result, task) := <new-task> PropCalc(Type(), t));
+		Property(nbl-props(?task*|[Prop((Property(), p), Type(), result)]), id, id);
+		vdebug(!"leave ");
+		match(tasks|[task|task*])
+		
+	nbl-use-site(tasks|paths) =
+		?PropAccess(e, p);
+		vdebug(!"enter ");
+		where ((result1, task1) := <new-task> PropCalc(Type(), e));
+		where ((result2, task2) := <new-task> Match("match1", result1));
+		PropAccess(id, nbl-use(?tasks|paths, [Candidate(Property(), [], Context(result2, Type(), [], Current()), [])]));
+		vdebug(!"leave ");
+		match(tasks|[task1, task2|tasks])
+
+	match-term: ("match1", Type(t, _)) -> t
+		
+	nbl-use-site(tasks|paths) =
+		?Var(p);
+		vdebug(!"enter ");
+		Var(nbl-use(tasks|paths, [Candidate(Property(), [], Current(), [])]));
+		vdebug(!"leave ")
+	
 // // 	nbl-uses: Call(c, m, as)            -> UseSite([Use(m, [Candidate(Method(), [PropMatch(Type(), PropCalc(Type(), as))], Current(), [])])])
 // // 	nbl-uses: This()      -> UseSite([Use(This(), [Candidate(Class(), [], Surrounding(), [])])])
 // 	
