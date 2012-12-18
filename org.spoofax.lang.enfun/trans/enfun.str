@@ -34,9 +34,9 @@ rules // Analysis
   analyze:
     (ast, path, project-path) -> (ast'', [], [], [], filesToAnalyze')
     with
-      (ast', elems, err) := <desugar-all; nbl-analyse> ast; // Optional AST desugaring
-      <map(debug)> elems;
-      <map(debug)> err;
+      (ast', entries, errors) := <desugar-all; nbl-analyze(|<language>, path, project-path)> ast;
+      <map(debug)> entries;
+      <map(debug)> errors;
       (ast'', filesToAnalyze) := <analyze-top(|<language>)> (ast', path, project-path);
       filesToAnalyze'         := <index-filepairs-to-files> filesToAnalyze
 
