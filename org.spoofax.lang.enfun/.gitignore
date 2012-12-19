@@ -3,4 +3,5 @@
 !/include/Enfun-parenthesize.str
 /bin
 /lib/nbl
+/lib/index
 /lib-refactoring

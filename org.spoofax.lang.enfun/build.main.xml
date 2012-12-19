@@ -50,17 +50,25 @@
 			  
 			  <target name="copy-lib-files" if="isWin" depends="os-detection">
 			    <!-- Copy NBL libraries, Ant is stupid and cannot link on Windows :( -->
-			  	<copy todir="${basedir}/lib/nbl" >  
-			  	  <fileset dir="${basedir}/../../nbl-library/org.strategoxt.imp.names.library/nbl/" includes="**"/>  
-			  	</copy>
+			    <copy todir="${basedir}/lib/nbl" >  
+			      <fileset dir="${basedir}/../../nbl-library/org.strategoxt.imp.names.library/nbl/" includes="**"/>  
+			    </copy>
+			    <copy todir="${basedir}/lib/index" >  
+			      <fileset dir="${basedir}/../../nbl-library/org.strategoxt.imp.names.library/index/" includes="**"/>  
+			    </copy>
 			  </target>
 			  
 			  <target name="link-lib-files" unless="isWin" depends="os-detection">
 			    <!-- Link to NBL libraries. -->
 			    <symlink 
-			    	resource="${basedir}/../../nbl-library/org.strategoxt.imp.names.library/nbl/" 
-			    	link="${basedir}/lib/nbl" 
-			    	overwrite="true" 
+			      resource="${basedir}/../../nbl-library/org.strategoxt.imp.names.library/nbl/" 
+			      link="${basedir}/lib/nbl" 
+			      overwrite="true" 
+			    />
+			    <symlink 
+			      resource="${basedir}/../../nbl-library/org.strategoxt.imp.names.library/index/" 
+			      link="${basedir}/lib/index" 
+			      overwrite="true" 
 			    />
 			  </target>
 </project>
