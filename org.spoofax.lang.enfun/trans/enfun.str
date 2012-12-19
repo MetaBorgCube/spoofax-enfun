@@ -26,57 +26,29 @@ imports
 	
 rules // Analysis
   
-  analyze-defs(|paths, defs, head-scope, head-scope-ns):
-    ast -> ast
-  
-	// Analyzes the current program, returning a tuple with the analyzed AST, errors, warnings, notes and
-	// files that should be re-analyzed.
-  analyze:
-    (ast, path, project-path) -> (ast'', [], [], [], filesToAnalyze')
-    with
-      (ast', entries, errors) := <desugar-all; nbl-analyze(|<language>, path, project-path)> ast;
-      <map(debug)> entries;
-      <map(debug)> errors;
-      (ast'', filesToAnalyze) := <analyze-top(|<language>)> (ast', path, project-path);
-      filesToAnalyze'         := <index-filepairs-to-files> filesToAnalyze
-
-  // Main entry point for analyzes, called when a single file is opened in the editor.
+	// Main entry point for analyzes, called when a single file is opened in the editor.
   editor-analyze:
-    (ast, path, project-path) -> (ast', errors, warnings, notes)
+    (ast, path, project-path) -> (ast', [], [], [])
     with
       editor-init;
-      (ast', errors, warnings, notes, filesToAnalyze) := <analyze> (ast, path, project-path);
-      <try(editor-queue-analysis)> <remove-all(?path)> filesToAnalyze
-      
-  // Main entry point for analyzes, called when multiple files have changed. 
-  editor-analyze:
-    files -> None()
-    where
-      not(is-tuple)
-    with
-    	index-setup(|<language>, [<project-path>], ".");
-      disable-commit-and-compile // Disable compilation during analysis.
-    with
-      editor-queue-analysis
-    with
-      // Enable and trigger compilation after all files have been analysed.
-      <enable-commit-and-compile> <language>;
-      <trigger-commit-and-compile> <language>
-      
-  // Called when current file is saved.
-  editor-save:
-    (_, _, _, _, _) -> None()
-    with
-      index-setup(|<language>, [<project-path>], ".");
-      <trigger-commit-and-compile> <language>
+      (ast', entries, errors) := <desugar-all; nbl-analyze(|<language>, path, project-path)> ast;
+      <map(debug(!"Entry: "))> entries;
+      <map(debug(!"Error: "))> errors
 
 rules // Editor services
-  
-  // Resolves a reference when the user control-clicks or presses F3 in the editor.
+
   editor-resolve:
-    (node, position, ast, path, project-path) -> <fail>
+    (node, position, ast, path, project-path) -> definition
     where
-      <![<id>]; debug> node
+    	index-setup(|<language>, [project-path], $[[project-path]/[path]]);
+    	_{anno*} := node;
+    	definition := <collect-one(try-resolve)> anno*
+    	
+  try-resolve:
+    Use(Result(number)) -> definition
+    where
+      uri := <index-get-value> DoneTask(number, ());
+      definition := <index-get> Def(uri)
       
   // Returns "hover help" information for a particular node in the editor.
   // For references, this rule is invoked using the resolved term.
@@ -120,14 +92,6 @@ rules // Debugging
     with
       filename := <guarantee-extension(|"aterm")> path;
       result   := selected
-      
-  // Prints the definition annotated abstract syntax ATerm of a selection.
-  debug-generate-deffed:
-    (selected, position, ast, path, project-path) -> (filename, result)
-    with
-      index-setup(|<language>, [project-path], $[[project-path]/[path]]);
-      filename := <guarantee-extension(|"aterm")> path;
-      result   := <analyze-defs> selected
       
   // Prints the analyzed annotated abstract syntax ATerm of a selection.
   debug-generate-analyzed:
