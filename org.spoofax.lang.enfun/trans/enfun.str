@@ -77,14 +77,14 @@ rules // Debugging
     (selected, position, ast, path, project-path) -> (filename, result)
     with
       filename := <guarantee-extension(|"aterm")> path;
-      result   := <desugar-all>selected
+      result   := <desugar-all> selected
 
   // Prints the desugared abstract syntax ATerm of a selection.
   debug-normalize-aterm:
     (selected, position, ast, path, project-path) -> (filename, result)
     with
       filename := <guarantee-extension(|"norm.aterm")> path;
-      result   := <normalize-all>selected
+      result   := <normalize-all> selected
             
   // Prints the abstract syntax ATerm of a selection.
   debug-generate-aterm:
@@ -97,9 +97,8 @@ rules // Debugging
   debug-generate-analyzed:
     (selected, position, ast, path, project-path) -> (filename, result)
     with
-      editor-init;
       filename := <guarantee-extension(|"analyzed.aterm")> path;
-      result   := <analyze-top(|<language>)> (selected, path, project-path)   
+      result   := selected
       
   // Prints the entries in the index of the current file.
   debug-index-show-current-file:
@@ -137,18 +136,6 @@ rules // Debugging
     with
       index-setup(|<language>, [project-path], $[[project-path]/[path]]);
       index-reload
-    
-rules // Utility
-  
-  // Queue parallel analysis for given list of files.
-  editor-queue-analysis = 
-    not(?[]); queue-strategy(|"editor-parallel-analyze", "Analyzing files")
-      
-  // Executes parallel analysis using the index library.
-  editor-parallel-analyze:
-    files -> None()
-    with
-      index-parallel-analyze-files(analyze)
       
 rules // pretty-printing
   
