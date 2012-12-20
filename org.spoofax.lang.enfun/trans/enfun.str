@@ -4,25 +4,16 @@ imports
   libstratego-lib
   libstratego-gpp
   libstratego-aterm
-
-imports
-  lib/editor-common.generated
-  lib/index-library.generated
-  lib/analysis-library.generated
-  lib/analysis-library-internal.generated
-  lib/compilation-library.generated
-  lib/nbl-library.generated
-  
-imports
   include/Enfun
   include/Enfun-parenthesize
+  lib/editor-common.generated
+  lib/index-library.generated
+  lib/index/core
+  lib/nbl/-
   syntax/Enfun.generated
   syntax/pp-runtime
   new-names
-  //types
   desugar
-
-	nbl/-
 	
 rules // Analysis
   
@@ -47,8 +38,8 @@ rules // Editor services
   try-resolve:
     Use(Result(number)) -> definition
     where
-      uri := <index-get-value> DoneTask(number, ());
-      definition := <index-get> Def(uri)
+      uri := <nbl-get-value> DoneTask(number, ());
+      definition := <nbl-get> Def(uri)
       
   // Returns "hover help" information for a particular node in the editor.
   // For references, this rule is invoked using the resolved term.
@@ -60,15 +51,15 @@ rules // Editor services
   // Completes an identifier when the user presses control-space
   // (the completion identifier in the AST provides additional context information)
   editor-complete:
-    (node, position, ast, path, project-path) -> proposals'
-    where
-      editor-init;
-      (ast', _) := <analyze-top(|<language>)> (ast, path, project-path);
-      item@COMPLETION(name) := <collect-one(?COMPLETION(_))> ast';
-      index-transaction(
-        (<index-lookup-all(|name)> item <+ ![]) => proposals
-      );
-      proposals' := <map(index-uri; index-uri-name)> proposals
+    (node, position, ast, path, project-path) -> <fail> //proposals'
+    // where
+    //   editor-init;
+    //   (ast', _) := <analyze-top(|<language>)> (ast, path, project-path);
+    //   item@COMPLETION(name) := <collect-one(?COMPLETION(_))> ast';
+    //   index-transaction(
+    //     (<index-lookup-all(|name)> item <+ ![]) => proposals
+    //   );
+    //   proposals' := <map(index-uri; index-uri-name)> proposals
 
 rules // Debugging
   
