@@ -63,6 +63,8 @@
    Else.1:iter-star           -- _1,
    While                      -- KW["while"] KW["("] _1 KW[")"] KW["{"] _2 KW["}"],
    While.2:iter-star          -- _1,
+   For                        -- KW["for"] KW["("] _1 KW[":"] _2 KW[":="] _3 KW[";"] _4 KW[";"] _5 KW[")"] KW["{"] _6 KW["}"],
+   For.6:iter-star            -- _1,
    COMPLETION-ElseIf          -- _1,
    COMPLETION-Else            -- _1,
    COMPLETION-Stat            -- _1,

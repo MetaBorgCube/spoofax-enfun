@@ -54,13 +54,15 @@ completions
 
 completions
   completion template Stat : "if(ID) { }" =
-    "if(" <ID:Exp> ") {\n\t" (cursor) "\n}" (blank)  
+    "if(" <ID:Exp> ") {\n\t" (cursor) "\n}" (blank)                  
   completion template ElseIf : "} else if (ID) { " =
-    "} else if (" <ID:Exp> ") {\n\t" (cursor) (blank)  
+    "} else if (" <ID:Exp> ") {\n\t" (cursor) (blank)       
   completion template Else : "} else { " =
-    "} else {\n\t" (cursor) (blank)  
+    "} else {\n\t" (cursor) (blank)                                   
   completion template Stat : "while(ID) { }" =
-    "while(" <ID:Exp> ") {\n\t" (cursor) "\n}" (blank)  
+    "while(" <ID:Exp> ") {\n\t" (cursor) "\n}" (blank)            
+  completion template Stat : "for(ID : ID := ID; ID; ID) { }" =
+    "for(" <ID:ID> " : " <ID:Type> " := " <ID:Exp> "; " <ID:Exp> "; " <ID:Exp> ") {\n\t" (cursor) "\n}" (blank)  
 
 completions
   completion template Stat : "var ID : ID;" =

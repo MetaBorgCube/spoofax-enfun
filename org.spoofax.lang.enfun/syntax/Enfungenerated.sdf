@@ -60,10 +60,11 @@ exports
     CONTENTCOMPLETE -> Stat {cons("COMPLETION-Stat")}
 
   context-free syntax
-    "if" "(" Exp ")" "{" Stat* ElseIf* Else? "}" -> Stat   {cons("IfElse")}
-    "}" "else" "if" "(" Exp ")" "{" Stat*        -> ElseIf {cons("ElseIf")}
-    "}" "else" "{" Stat*                         -> Else   {cons("Else")}
-    "while" "(" Exp ")" "{" Stat* "}"            -> Stat   {cons("While")}
+    "if" "(" Exp ")" "{" Stat* ElseIf* Else? "}"                     -> Stat   {cons("IfElse")}
+    "}" "else" "if" "(" Exp ")" "{" Stat*                            -> ElseIf {cons("ElseIf")}
+    "}" "else" "{" Stat*                                             -> Else   {cons("Else")}
+    "while" "(" Exp ")" "{" Stat* "}"                                -> Stat   {cons("While")}
+    "for" "(" ID ":" Type ":=" Exp ";" Exp ";" Exp ")" "{" Stat* "}" -> Stat   {cons("For")}
 
   context-free syntax
     CONTENTCOMPLETE -> ElseIf {cons("COMPLETION-ElseIf")}

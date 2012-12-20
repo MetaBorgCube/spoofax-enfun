@@ -391,6 +391,30 @@ strategies
          )
        ]
 
+  prettyprint-Stat =
+    ?For(a, b, c, d, e, f)
+    ; ![ H(
+           [SOpt(HS(), "0")]
+         , [ S("for(")
+           , <pp-one-Z(prettyprint-ID)> a
+           , S(" : ")
+           , <pp-one-Z(prettyprint-Type)> b
+           , S(" := ")
+           , <pp-one-Z(prettyprint-Exp)> c
+           , S("; ")
+           , <pp-one-Z(prettyprint-Exp)> d
+           , S("; ")
+           , <pp-one-Z(prettyprint-Exp)> e
+           , S(") {")
+           ]
+         )
+       , <pp-indent(|"2")> [<pp-H-list(prettyprint-Stat)> f]
+       , H(
+           [SOpt(HS(), "0")]
+         , [S("}")]
+         )
+       ]
+
   prettyprint-example =
     prettyprint-ElseIf
 
