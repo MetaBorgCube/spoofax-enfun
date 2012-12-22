@@ -22,3 +22,4 @@ outliner Default outliner
   Stat.IfElse
   ElseIf.ElseIf
   Stat.While
+  Stat.For

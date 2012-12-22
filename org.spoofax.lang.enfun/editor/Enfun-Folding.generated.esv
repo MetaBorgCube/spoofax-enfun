@@ -22,7 +22,7 @@ folding Default folding definitions
   
   Module.Module
   Definition.Entity
-  OptTypeParams0
+  OptTypeParams1
   TypeParams.TypeParams
   Property.FunDecl
   Property.FunDef
