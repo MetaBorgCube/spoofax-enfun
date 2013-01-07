@@ -5,3 +5,4 @@
 /lib/nbl
 /lib/index
 /lib-refactoring
+*.aterm
