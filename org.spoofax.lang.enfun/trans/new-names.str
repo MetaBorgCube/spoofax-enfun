@@ -37,7 +37,7 @@ rules // modules
 	nbl-use-site(|lang, elems, tasks, paths) =
 		?Imports(m);
 		vdebug(!"enter ");
-		Imports(nbl-use(|lang, elems, tasks, paths, Candidate(Module(), [], Current(), [])));//[All(Type()), Imported(Type())])]));
+		Imports(nbl-use(|lang, elems, tasks, paths, Candidate(Module(), [], Current())));//[All(Type()), Imported(Type())])]));
 		vdebug(!"leave ")
 		
 rules // types
@@ -70,13 +70,13 @@ rules // types
 	nbl-use-site(|lang, elems, tasks, paths) =
 		?Type(x, _);
 		vdebug(!"enter ");
-		Type(nbl-use(|lang, elems, tasks, paths, Candidate(Type(), [], Current(), [])), id);
+		Type(nbl-use(|lang, elems, tasks, paths, Candidate(Type(), [], Current())), id);
 		vdebug(!"leave ")
 		
 	nbl-use-site(|lang, elems, tasks, paths) =
 		?Extends(c);
 		vdebug(!"enter ");
-		Extends(nbl-use(|lang, elems, tasks, paths, Candidate(Type(), [], Current(), [])));
+		Extends(nbl-use(|lang, elems, tasks, paths, Candidate(Type(), [], Current())));
 		vdebug(!"leave ")
 
 rules // properties
@@ -99,7 +99,7 @@ rules // properties
 		vdebug(!"enter ");
 		where ((result1, task1) := <new-task(|tasks)> PropCalc(Type(), e));
 		where ((result2, task2) := <new-task(|tasks)> Match("match1", result1));
-		PropAccess(id, nbl-use(|lang, elems, tasks, paths, Candidate(Property(), [], Context(result2, Type(), [], Current()), [])));
+		PropAccess(id, nbl-use(|lang, elems, tasks, paths, Candidate(Property(), [], Context(result2, Type(), [], Current()))));
 		vdebug(!"leave ")
 
 	match-term: ("match1", Type(t, _)) -> t
@@ -107,7 +107,7 @@ rules // properties
 	nbl-use-site(|lang, elems, tasks, paths) =
 		?Var(p);
 		vdebug(!"enter ");
-		Var(nbl-use(|lang, elems, tasks, paths, [Candidate(Variable(), [], Current(), []), Candidate(Property(), [], Current(), [])]));
+		Var(nbl-use(|lang, elems, tasks, paths, [Candidate(Variable(), [], Current()), Candidate(Property(), [], Current())]));
 		vdebug(!"leave ")
 
 rules // variables
