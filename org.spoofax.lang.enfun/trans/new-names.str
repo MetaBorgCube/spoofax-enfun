@@ -34,10 +34,10 @@ rules // modules
 		Module(nbl-def(cpaths, spaths|lang, elems, tasks, paths, Module(), Unique(), [Current()], [Type()]), id);
 		vdebug(!"leave ")
 
-	nbl-use-site(|lang, elems, tasks, paths) =
+	nbl-use-site(|lang, elems, tasks, paths, deps) =
 		?Imports(m);
 		vdebug(!"enter ");
-		Imports(nbl-use(|lang, elems, tasks, paths, Candidate(Module(), [], Current())));//[All(Type()), Imported(Type())])]));
+		Imports(nbl-use(|lang, elems, tasks, paths, deps, Candidate(Module(), [], Current())));//[All(Type()), Imported(Type())])]));
 		vdebug(!"leave ")
 		
 rules // types
@@ -67,16 +67,16 @@ rules // types
 		TypeParam(nbl-props(|lang, elems, tasks, [Prop((Type(), t), Type(), Type(t, []))]));
 		vdebug(!"leave ")	
 	
-	nbl-use-site(|lang, elems, tasks, paths) =
+	nbl-use-site(|lang, elems, tasks, paths, deps) =
 		?Type(x, _);
 		vdebug(!"enter ");
-		Type(nbl-use(|lang, elems, tasks, paths, Candidate(Type(), [], Current())), id);
+		Type(nbl-use(|lang, elems, tasks, paths, deps, Candidate(Type(), [], Current())), id);
 		vdebug(!"leave ")
 		
-	nbl-use-site(|lang, elems, tasks, paths) =
+	nbl-use-site(|lang, elems, tasks, paths, deps) =
 		?Extends(c);
 		vdebug(!"enter ");
-		Extends(nbl-use(|lang, elems, tasks, paths, Candidate(Type(), [], Current())));
+		Extends(nbl-use(|lang, elems, tasks, paths, deps, Candidate(Type(), [], Current())));
 		vdebug(!"leave ")
 
 rules // properties
@@ -94,20 +94,20 @@ rules // properties
 		Property(nbl-props(|lang, elems, tasks, [Prop((Property(), p), Type(), result)]), id, id);
 		vdebug(!"leave ")
 		
-	nbl-use-site(|lang, elems, tasks, paths) =
+	nbl-use-site(|lang, elems, tasks, paths, deps) =
 		?PropAccess(e, p);
 		vdebug(!"enter ");
 		where ((result1, task1) := <new-task(|tasks)> PropCalc(Type(), e));
 		where ((result2, task2) := <new-task(|tasks)> Match("match1", result1));
-		PropAccess(id, nbl-use(|lang, elems, tasks, paths, Candidate(Property(), [], Context(result2, Type(), [], Current()))));
+		PropAccess(id, nbl-use(|lang, elems, tasks, paths, deps, Candidate(Property(), [], Context(result2, Type(), [], Current()))));
 		vdebug(!"leave ")
 
 	match-term: ("match1", Type(t, _)) -> t
 		
-	nbl-use-site(|lang, elems, tasks, paths) =
+	nbl-use-site(|lang, elems, tasks, paths, deps) =
 		?Var(p);
 		vdebug(!"enter ");
-		Var(nbl-use(|lang, elems, tasks, paths, [Candidate(Variable(), [], Current()), Candidate(Property(), [], Current())]));
+		Var(nbl-use(|lang, elems, tasks, paths, deps, [Candidate(Variable(), [], Current()), Candidate(Property(), [], Current())]));
 		vdebug(!"leave ")
 
 rules // variables
