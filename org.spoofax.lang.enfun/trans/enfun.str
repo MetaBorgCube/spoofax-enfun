@@ -38,6 +38,12 @@ rules // Editor services
     node -> (node, "Unresolved reference.")
     where
       nbl-is-unresolved
+
+  constraint-error:
+    node -> (node, "Duplicate definition.")
+    where
+      nbl-is-duplicate-definition
+      
   constraint-warning = fail
   constraint-note = fail
 
@@ -48,7 +54,9 @@ rules // Editor services
       definition := <nbl-resolve> node
 
   editor-hover:
-    (target, position, ast, path, project-path) -> (target, <type-of <+ !"Unknown type."> target)
+    (target, position, ast, path, project-path) -> $[Type: [type]]
+    where
+      type := <type-of> target
 
   editor-complete:
     (node, position, ast, path, project-path) -> proposals
