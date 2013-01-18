@@ -98,42 +98,22 @@ rules // Debugging
       filename := <guarantee-extension(|"analyzed.aterm")> path;
       result   := selected
       
-  // Prints the entries in the index of the current file.
-  debug-index-show-current-file:
-    (selected, position, ast, path, project-path) -> (filename, result)
-    with
-      index-setup(|<language>, [project-path], $[[project-path]/[path]]);
-      filename := <guarantee-extension(|"index.currentfile.aterm")> path;
-      result   := <index-get-all-in-file> path
-      
-  // Prints the entries in the index of all files.
-  debug-index-show-all-files:
-    (selected, position, ast, path, project-path) -> (filename, result)
-    with
-      index-setup(|<language>, [project-path], $[[project-path]/[path]]);
-      filename := <guarantee-extension(|"index.allfiles.aterm")> path;
-      result   := <map(\filename -> (filename, <index-get-all-in-file> filename)\)> <index-get-all-files>
+rules // NBL debugging
+     
+  debug-show-current-partition = 
+    nbl-debug-show-current-partition(|<language>)
+    
+  debug-show-all-partitions =
+    nbl-debug-show-all-partitions(|<language>)
 
-  // Cleans current file from the index.
-  debug-index-clear-current:
-    (selected, position, ast, path, project-path)  -> None()
-    with
-      index-setup(|<language>, [project-path], $[[project-path]/[path]]);
-      <index-clear-file> $[[project-path]/[path]]
-      
-  // Cleans all data from the index.
-  debug-index-clear:
-    (selected, position, ast, path, project-path)  -> None()
-    with
-      index-setup(|<language>, [project-path], $[[project-path]/[path]]);
-      index-clear
-      
-  // Cleans all data from the index and re-analyzes every file.
-  debug-index-reload:
-    (selected, position, ast, path, project-path)  -> None()
-    with
-      index-setup(|<language>, [project-path], $[[project-path]/[path]]);
-      index-reload
+  debug-clear-current =
+    nbl-debug-clear-current(|<language>)
+    
+  debug-clear-all =
+    nbl-debug-clear-all(|<language>)  
+
+  debug-reload = 
+    nbl-debug-reload(|<language>)
       
 rules // pretty-printing
   
