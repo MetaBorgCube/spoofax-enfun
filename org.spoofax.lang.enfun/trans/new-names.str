@@ -251,3 +251,14 @@ rules // variables
 // 		
 // 
 	
+rules // Scoping projections
+
+  nbl-scopes = ?(Module(), Type())
+  
+  nbl-scopes = ?(Type(), Property())
+  nbl-scopes = ?(Type(), Function())
+  nbl-scopes = ?(Type(), Type())
+  nbl-scopes = ?(Type(), Variable())
+  
+  nbl-scopes = ?(Function(), Variable())
+  
