@@ -78,7 +78,7 @@ rules // Editor services
   constraint-error:
     node -> (node, "Duplicate definition.")
     where
-      nbl-is-duplicate-definition
+      nbl-get-duplicate-definitions
       
   constraint-error:
     node -> (node, $[Ambiguous, could be from [<map(nbl-print-uri); separate-by(|", "); concat-strings> ambiguity*]])
