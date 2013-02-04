@@ -27,8 +27,10 @@ builders
   builder  : "Show NBL entries for all patitions"      = debug-show-all-partitions (openeditor) (realtime) (meta)
   builder  : "Clear NBL entries for current partition" = debug-clear-current (meta)
   builder  : "Clear NBL all entries"                   = debug-clear-all (meta)
-  builder  : "Reload all NBL entries"                  = debug-reload (meta)                                                                      
-
+  builder  : "Reload all NBL entries"                  = debug-reload (meta)
+  
+  on save  : editor-save
+  
 refactorings
 
   pretty-print : pp-enfun-string
@@ -37,5 +39,3 @@ refactorings
     shortcut : "org.eclipse.jdt.ui.edit.text.java.rename.element"
     input
       identifier : "new name" = ""
-
-  //on save : editor-save
