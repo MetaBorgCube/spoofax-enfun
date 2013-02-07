@@ -37,7 +37,7 @@ rules // modules
 	nbl-use-site(|lang, elems, tasks, paths, deps) =
 		?Imports(m);
 		vdebug(!"enter ");
-		Imports(nbl-use(|lang, elems, tasks, paths, deps, Candidate(Module(), [], Current())));
+		Imports(nbl-use(|lang, elems, tasks, paths, deps, UseCandidate(Module(), [], Current(), All())));
 		vdebug(!"leave ")
 		
 rules // types
@@ -70,13 +70,13 @@ rules // types
 	nbl-use-site(|lang, elems, tasks, paths, deps) =
 		?Type(x, _);
 		vdebug(!"enter ");
-		Type(nbl-use(|lang, elems, tasks, paths, deps, Candidate(Type(), [], Current())), id);
+		Type(nbl-use(|lang, elems, tasks, paths, deps, UseCandidate(Type(), [], Current(), All())), id);
 		vdebug(!"leave ")
 		
 	nbl-use-site(|lang, elems, tasks, paths, deps) =
 		?Extends(c);
 		vdebug(!"enter ");
-		Extends(nbl-use(|lang, elems, tasks, paths, deps, Candidate(Type(), [], Current())));
+		Extends(nbl-use(|lang, elems, tasks, paths, deps, UseCandidate(Type(), [], Current(), All())));
 		vdebug(!"leave ")
 
 rules // properties
@@ -99,7 +99,7 @@ rules // properties
 		vdebug(!"enter ");
 		where (result1 := <new-task(|tasks)> PropCalc(Type(), e));
 		where (result2 := <new-task(|tasks, [<nbl-result-number> result1])> Match("match1", result1));
-		PropAccess(id, nbl-use(|lang, elems, tasks, paths, deps, Candidate(Property(), [], result2)));
+		PropAccess(id, nbl-use(|lang, elems, tasks, paths, deps, UseCandidate(Property(), [], result2, One())));
 		vdebug(!"leave ")
 
 	match-term: ("match1", Type(t, _)) -> t
@@ -107,7 +107,7 @@ rules // properties
 	nbl-use-site(|lang, elems, tasks, paths, deps) =
 		?Var(p);
 		vdebug(!"enter ");
-		Var(nbl-use(|lang, elems, tasks, paths, deps, [Candidate(Variable(), [], Current()), Candidate(Property(), [], Current())]));
+		Var(nbl-use(|lang, elems, tasks, paths, deps, [UseCandidate(Variable(), [], Current(), All()), UseCandidate(Property(), [], Current(), All())]));
 		vdebug(!"leave ")
 
 rules // variables
@@ -152,8 +152,8 @@ rules // variables
 		For(nbl-props(|lang, elems, tasks, [Prop(Type(), result)]), id, id, id, id, id);
 		vdebug(!"leave ")
 			
-// // 	nbl-uses: Call(c, m, as)            -> UseSite([Use(m, [Candidate(Method(), [PropMatch(Type(), PropCalc(Type(), as))], Current(), [])])])
-// // 	nbl-uses: This()      -> UseSite([Use(This(), [Candidate(Class(), [], Surrounding(), [])])])
+// // 	nbl-uses: Call(c, m, as)            -> UseSite([Use(m, [UseCandidate(Method(), [PropMatch(Type(), PropCalc(Type(), as))], Current(), [])])])
+// // 	nbl-uses: This()      -> UseSite([Use(This(), [UseCandidate(Class(), [], Surrounding(), [])])])
 // 	
 // rules // programs
 // 	
@@ -174,19 +174,19 @@ rules // variables
 // 	nbl-use-site(tasks|paths) =
 // 		?NewObject(c);
 // 		vdebug(!"enter ");
-// 		NewObject(nbl-use(tasks|paths, [Candidate(Class(), [], Current(), [])]));
+// 		NewObject(nbl-use(tasks|paths, [UseCandidate(Class(), [], Current(), [])]));
 // 		vdebug(!"leave ")
 // 		
 // 	nbl-use-site(tasks|paths) =
 // 		?ClassType(c);
 // 		vdebug(!"enter ");
-// 		ClassType(nbl-use(tasks|paths, [Candidate(Class(), [], Current(), [])]));
+// 		ClassType(nbl-use(tasks|paths, [UseCandidate(Class(), [], Current(), [])]));
 // 		vdebug(!"leave ")
 // 
 // 	nbl-use-site(tasks|paths) =
 // 		?Parent(p);
 // 		vdebug(!"enter ");
-// 		Parent(nbl-use(tasks|paths, [Candidate(Class(), [], Current(), [])]));
+// 		Parent(nbl-use(tasks|paths, [UseCandidate(Class(), [], Current(), [])]));
 // 		vdebug(!"leave ")
 // 
 // 	nbl-prop-site(tasks|paths) =
@@ -240,7 +240,7 @@ rules // variables
 // 	nbl-use-site(tasks|paths) =
 // 		?VarRef(v);
 // 		vdebug(!"enter ");
-// 		VarRef(nbl-use(tasks|paths, [Candidate(Variable(), [], Current(), []), Candidate(Field(), [], Current(), [])]));
+// 		VarRef(nbl-use(tasks|paths, [UseCandidate(Variable(), [], Current(), []), UseCandidate(Field(), [], Current(), [])]));
 // 		vdebug(!"leave ")
 // 	
 // 	nbl-prop-site(tasks|paths) =
